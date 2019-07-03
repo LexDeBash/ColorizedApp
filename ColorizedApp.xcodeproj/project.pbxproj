@@ -12,6 +12,7 @@
 		A822F52522CB6CB7003CDD99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A822F52322CB6CB7003CDD99 /* Main.storyboard */; };
 		A822F52722CB6CB8003CDD99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A822F52622CB6CB8003CDD99 /* Assets.xcassets */; };
 		A822F52A22CB6CB8003CDD99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A822F52822CB6CB8003CDD99 /* LaunchScreen.storyboard */; };
+		A822F53222CB6EC5003CDD99 /* ColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A822F53122CB6EC5003CDD99 /* ColorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		A822F52622CB6CB8003CDD99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A822F52922CB6CB8003CDD99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A822F52B22CB6CB8003CDD99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A822F53122CB6EC5003CDD99 /* ColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				A822F51F22CB6CB7003CDD99 /* AppDelegate.swift */,
 				A822F52122CB6CB7003CDD99 /* ViewController.swift */,
+				A822F53122CB6EC5003CDD99 /* ColorViewController.swift */,
 				A822F52322CB6CB7003CDD99 /* Main.storyboard */,
 				A822F52622CB6CB8003CDD99 /* Assets.xcassets */,
 				A822F52822CB6CB8003CDD99 /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A822F52222CB6CB7003CDD99 /* ViewController.swift in Sources */,
+				A822F53222CB6EC5003CDD99 /* ColorViewController.swift in Sources */,
 				A822F52022CB6CB7003CDD99 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
