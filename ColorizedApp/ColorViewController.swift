@@ -23,6 +23,9 @@ class ColorViewController: UIViewController {
     @IBOutlet weak var redTextField: UITextField!
     @IBOutlet weak var greenTextField: UITextField!
     @IBOutlet weak var blueTextField: UITextField!
+    
+    var delegate: ColorDelegate?
+    var colorFromMainVC: UIColor!
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +35,9 @@ class ColorViewController: UIViewController {
         redSlider.tintColor = .red
         greenSlider.tintColor = .green
         
-        setColor()
+        colorView.backgroundColor = colorFromMainVC
+        
+        setValueForSlider()
         setValueForLabel()
         setValueForTextField()
         
@@ -67,13 +72,14 @@ class ColorViewController: UIViewController {
     }
     
     // Цвет вью
-    private func setColor() {
+    func setColor() {
         let newColor = UIColor(red: CGFloat(redSlider.value),
                                green: CGFloat(greenSlider.value),
                                blue: CGFloat(blueSlider.value),
                                alpha: 1)
         
         colorView.backgroundColor = newColor
+        delegate?.setColor(newColor)
     }
     
     private func setValueForLabel() {
@@ -86,6 +92,14 @@ class ColorViewController: UIViewController {
         redTextField.text = string(from: redSlider)
         greenTextField.text = string(from: greenSlider)
         blueTextField.text = string(from: blueSlider)
+    }
+    
+    private func setValueForSlider() {
+        let ciColor = CIColor(color: colorFromMainVC)
+        
+        redSlider.value = Float(ciColor.red)
+        greenSlider.value = Float(ciColor.green)
+        blueSlider.value = Float(ciColor.blue)
     }
     
     // Значения RGB
