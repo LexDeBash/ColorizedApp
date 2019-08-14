@@ -9,16 +9,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    @IBAction func unwind(for segue: UIStoryboardSegue) {
-        let colorVC = segue.source as! ColorViewController
-        colorVC.delegate = self
-        colorVC.setColor()
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let colorVC = segue.destination as! ColorViewController
         colorVC.colorFromMainVC = view.backgroundColor
+    }
+    
+    @IBAction func unwind(for segue: UIStoryboardSegue) {
+        let colorVC = segue.source as! ColorViewController
+        colorVC.delegate = self
+        colorVC.setColor()
     }
 }
 
