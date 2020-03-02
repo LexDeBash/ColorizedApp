@@ -12,18 +12,13 @@ class MainViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let colorVC = segue.destination as! ColorViewController
-        colorVC.colorFromMainVC = view.backgroundColor
-    }
-    
-    @IBAction func unwind(for segue: UIStoryboardSegue) {
-        let colorVC = segue.source as! ColorViewController
         colorVC.delegate = self
-        colorVC.setColor()
+        colorVC.currentColor = view.backgroundColor
     }
 }
 
 // MARK: - ColorDelegate
-extension MainViewController: ColorDelegate {
+extension MainViewController: ColorViewControllerDelegate {
     func setColor(_ color: UIColor) {
         view.backgroundColor = color
     }

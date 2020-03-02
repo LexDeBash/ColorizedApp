@@ -8,7 +8,15 @@
 
 import UIKit
 
-class ColorViewController: UIViewController {
+protocol ColorViewControllerDelegate {
+    func setColor(_ color: UIColor)
+}
+
+protocol ColorData {
+    var currentColor: UIColor? { get }
+}
+
+class ColorViewController: UIViewController, ColorData {
 
     @IBOutlet weak var colorView: UIView!
     
@@ -24,8 +32,8 @@ class ColorViewController: UIViewController {
     @IBOutlet weak var greenTextField: UITextField!
     @IBOutlet weak var blueTextField: UITextField!
     
-    var delegate: ColorDelegate?
-    var colorFromMainVC: UIColor!
+    var delegate: ColorViewControllerDelegate!
+    var currentColor: UIColor?
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +43,7 @@ class ColorViewController: UIViewController {
         redSlider.tintColor = .red
         greenSlider.tintColor = .green
         
-        colorView.backgroundColor = colorFromMainVC
+        colorView.backgroundColor = currentColor
         
         setValueForSlider()
         setValueForLabel()
@@ -68,6 +76,7 @@ class ColorViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed() {
+        delegate?.setColor(colorView.backgroundColor ?? .white)
         dismiss(animated: true)
     }
     
@@ -79,7 +88,6 @@ class ColorViewController: UIViewController {
                                alpha: 1)
         
         colorView.backgroundColor = newColor
-        delegate?.setColor(newColor)
     }
     
     private func setValueForLabel() {
@@ -95,7 +103,7 @@ class ColorViewController: UIViewController {
     }
     
     private func setValueForSlider() {
-        let ciColor = CIColor(color: colorFromMainVC)
+        let ciColor = CIColor(color: currentColor ?? .white)
         
         redSlider.value = Float(ciColor.red)
         greenSlider.value = Float(ciColor.green)
