@@ -14,6 +14,7 @@ protocol ColorViewControllerDelegate {
 
 class ColorViewController: UIViewController {
 
+    // MARK: - IB Outlets
     @IBOutlet weak var colorView: UIView!
     
     @IBOutlet weak var redLabel: UILabel!
@@ -28,6 +29,7 @@ class ColorViewController: UIViewController {
     @IBOutlet weak var greenTextField: UITextField!
     @IBOutlet weak var blueTextField: UITextField!
     
+    // MARK: - Public Properties
     var delegate: ColorViewControllerDelegate!
     var currentColor: UIColor!
         
@@ -48,7 +50,7 @@ class ColorViewController: UIViewController {
         
     }
     
-    // Изменение цветов слайдерами
+    // MARK: - IB Actions
     @IBAction func rgbSlider(_ sender: UISlider) {
         
         switch sender.tag {
@@ -72,8 +74,11 @@ class ColorViewController: UIViewController {
         delegate?.setColor(colorView.backgroundColor ?? .white)
         dismiss(animated: true)
     }
+}
+
+// MARK: - Private Methods
+extension ColorViewController {
     
-    // Цвет вью
     private func setColor() {
         colorView.backgroundColor = UIColor(
             red: CGFloat(redSlider.value),
@@ -117,8 +122,41 @@ class ColorViewController: UIViewController {
     private func string(from slider: UISlider) -> String {
         return String(format: "%.2f", slider.value)
     }
+    
+    private func addDoneButtonTo(_ textFields: UITextField...) {
+        
+        textFields.forEach { textField in
+            let keyboardToolbar = UIToolbar()
+            textField.inputAccessoryView = keyboardToolbar
+            keyboardToolbar.sizeToFit()
+            
+            let doneButton = UIBarButtonItem(title:"Done",
+                                             style: .done,
+                                             target: self,
+                                             action: #selector(didTapDone))
+            
+            let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                                                target: nil,
+                                                action: nil)
+            
+            keyboardToolbar.items = [flexBarButton, doneButton]
+        }
+    }
+    
+    @objc private func didTapDone() {
+        view.endEditing(true)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+
 }
 
+// MARK: - UITextFieldDelegate
 extension ColorViewController: UITextFieldDelegate {
     
     // Скрываем клавиатуру нажатием на "Done"
@@ -155,40 +193,4 @@ extension ColorViewController: UITextFieldDelegate {
             showAlert(title: "Wrong format!", message: "Please enter correct value")
         }
     }
-}
-
-extension ColorViewController {
-    
-    // Метод для отображения кнопки "Готово" на цифровой клавиатуре
-    private func addDoneButtonTo(_ textFields: UITextField...) {
-        
-        textFields.forEach { textField in
-            let keyboardToolbar = UIToolbar()
-            textField.inputAccessoryView = keyboardToolbar
-            keyboardToolbar.sizeToFit()
-            
-            let doneButton = UIBarButtonItem(title:"Done",
-                                             style: .done,
-                                             target: self,
-                                             action: #selector(didTapDone))
-            
-            let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                                                target: nil,
-                                                action: nil)
-            
-            keyboardToolbar.items = [flexBarButton, doneButton]
-        }
-    }
-    
-    @objc private func didTapDone() {
-        view.endEditing(true)
-    }
-    
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(okAction)
-        present(alert, animated: true)
-    }
-
 }
