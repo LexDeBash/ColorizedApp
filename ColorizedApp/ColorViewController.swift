@@ -12,11 +12,7 @@ protocol ColorViewControllerDelegate {
     func setColor(_ color: UIColor)
 }
 
-protocol ColorData {
-    var currentColor: UIColor? { get }
-}
-
-class ColorViewController: UIViewController, ColorData {
+class ColorViewController: UIViewController {
 
     @IBOutlet weak var colorView: UIView!
     
@@ -33,7 +29,7 @@ class ColorViewController: UIViewController, ColorData {
     @IBOutlet weak var blueTextField: UITextField!
     
     var delegate: ColorViewControllerDelegate!
-    var currentColor: UIColor?
+    var currentColor: UIColor!
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,12 +42,9 @@ class ColorViewController: UIViewController, ColorData {
         colorView.backgroundColor = currentColor
         
         setValueForSlider()
-        setValueForLabel()
-        setValueForTextField()
-        
-        addDoneButtonTo(redTextField)
-        addDoneButtonTo(greenTextField)
-        addDoneButtonTo(blueTextField)
+        setValue(for: redLabel, greenLabel, blueLabel)
+        setValue(for: redTextField, greenTextField, blueTextField)
+        addDoneButtonTo(redTextField, greenTextField, blueTextField)
         
     }
     
@@ -81,29 +74,39 @@ class ColorViewController: UIViewController, ColorData {
     }
     
     // Цвет вью
-    func setColor() {
-        let newColor = UIColor(red: CGFloat(redSlider.value),
-                               green: CGFloat(greenSlider.value),
-                               blue: CGFloat(blueSlider.value),
-                               alpha: 1)
-        
-        colorView.backgroundColor = newColor
+    private func setColor() {
+        colorView.backgroundColor = UIColor(
+            red: CGFloat(redSlider.value),
+            green: CGFloat(greenSlider.value),
+            blue: CGFloat(blueSlider.value),
+            alpha: 1
+        )
     }
     
-    private func setValueForLabel() {
-        redLabel.text = string(from: redSlider)
-        greenLabel.text = string(from: greenSlider)
-        blueLabel.text = string(from: blueSlider)
+    private func setValue(for labels: UILabel...) {
+        labels.forEach { label in
+            switch label.tag {
+            case 0: redLabel.text = string(from: redSlider)
+            case 1: greenLabel.text = string(from: greenSlider)
+            case 2: blueLabel.text = string(from: blueSlider)
+            default: break
+            }
+        }
     }
     
-    private func setValueForTextField() {
-        redTextField.text = string(from: redSlider)
-        greenTextField.text = string(from: greenSlider)
-        blueTextField.text = string(from: blueSlider)
+    private func setValue(for textFields: UITextField...) {
+        textFields.forEach { textField in
+            switch textField.tag {
+            case 0: redTextField.text = string(from: redSlider)
+            case 1: greenTextField.text = string(from: greenSlider)
+            case 2: blueTextField.text = string(from: blueSlider)
+            default: break
+            }
+        }
     }
     
     private func setValueForSlider() {
-        let ciColor = CIColor(color: currentColor ?? .white)
+        let ciColor = CIColor(color: currentColor)
         
         redSlider.value = Float(ciColor.red)
         greenSlider.value = Float(ciColor.green)
@@ -121,13 +124,11 @@ extension ColorViewController: UITextFieldDelegate {
     // Скрываем клавиатуру нажатием на "Done"
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        return true
     }
     
     // Скрытие клавиатуры по тапу за пределами Text View
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        
         view.endEditing(true) // Скрывает клавиатуру, вызванную для любого объекта
     }
     
@@ -136,16 +137,20 @@ extension ColorViewController: UITextFieldDelegate {
         guard let text = textField.text else { return }
         
         if let currentValue = Float(text) {
-            
             switch textField.tag {
-            case 0: redSlider.value = currentValue
-            case 1: greenSlider.value = currentValue
-            case 2: blueSlider.value = currentValue
+            case 0:
+                redSlider.setValue(currentValue, animated: true)
+                setValue(for: redLabel)
+            case 1:
+                greenSlider.setValue(currentValue, animated: true)
+                setValue(for: greenLabel)
+            case 2:
+                blueSlider.setValue(currentValue, animated: true)
+                setValue(for: blueLabel)
             default: break
             }
             
             setColor()
-            setValueForLabel()
         } else {
             showAlert(title: "Wrong format!", message: "Please enter correct value")
         }
@@ -155,24 +160,24 @@ extension ColorViewController: UITextFieldDelegate {
 extension ColorViewController {
     
     // Метод для отображения кнопки "Готово" на цифровой клавиатуре
-    private func addDoneButtonTo(_ textField: UITextField) {
+    private func addDoneButtonTo(_ textFields: UITextField...) {
         
-        let keyboardToolbar = UIToolbar()
-        textField.inputAccessoryView = keyboardToolbar
-        keyboardToolbar.sizeToFit()
-        
-        let doneButton = UIBarButtonItem(title:"Done",
-                                         style: .done,
-                                         target: self,
-                                         action: #selector(didTapDone))
-        
-        let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                                            target: nil,
-                                            action: nil)
-        
-        
-        
-        keyboardToolbar.items = [flexBarButton, doneButton]
+        textFields.forEach { textField in
+            let keyboardToolbar = UIToolbar()
+            textField.inputAccessoryView = keyboardToolbar
+            keyboardToolbar.sizeToFit()
+            
+            let doneButton = UIBarButtonItem(title:"Done",
+                                             style: .done,
+                                             target: self,
+                                             action: #selector(didTapDone))
+            
+            let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                                                target: nil,
+                                                action: nil)
+            
+            keyboardToolbar.items = [flexBarButton, doneButton]
+        }
     }
     
     @objc private func didTapDone() {
