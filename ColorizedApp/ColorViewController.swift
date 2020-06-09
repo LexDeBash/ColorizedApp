@@ -44,8 +44,8 @@ class ColorViewController: UIViewController {
         colorView.backgroundColor = currentColor
         
         setValue(for: redSlider, greenSlider, blueSlider)
-//        setValue(for: redLabel, greenLabel, blueLabel)
-//        setValue(for: redTextField, greenTextField, blueTextField)
+        setValue(for: redLabel, greenLabel, blueLabel)
+        setValue(for: redTextField, greenTextField, blueTextField)
         addDoneButtonTo(redTextField, greenTextField, blueTextField)
         
     }
@@ -55,11 +55,14 @@ class ColorViewController: UIViewController {
         
         switch sender.tag {
         case 0:
-            setValues(for: redLabel, and: redTextField, from: sender)
+            redLabel.text = string(from: sender)
+            redTextField.text = string(from: sender)
         case 1:
-            setValues(for: greenLabel, and: greenTextField, from: sender)
+            greenLabel.text = string(from: sender)
+            greenTextField.text = string(from: sender)
         case 2:
-            setValues(for: blueLabel, and: blueTextField, from: sender)
+            blueLabel.text = string(from: sender)
+            blueTextField.text = string(from: sender)
         default:
             break
         }
@@ -85,12 +88,6 @@ extension ColorViewController {
         )
     }
     
-    private func setValues(for label: UILabel, and textField: UITextField, from slider: UISlider) {
-        label.text = string(from: slider)
-        textField.text = string(from: slider)
-    }
-    
-    /*
     private func setValue(for labels: UILabel...) {
         labels.forEach { label in
             switch label.tag {
@@ -101,9 +98,7 @@ extension ColorViewController {
             }
         }
     }
-    */
     
-    /*
     private func setValue(for textFields: UITextField...) {
         textFields.forEach { textField in
             switch textField.tag {
@@ -114,7 +109,6 @@ extension ColorViewController {
             }
         }
     }
-    */
     
     private func setValue(for sliders: UISlider...) {
         let ciColor = CIColor(color: currentColor)
