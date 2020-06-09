@@ -43,7 +43,7 @@ class ColorViewController: UIViewController {
         
         colorView.backgroundColor = currentColor
         
-        setValueForSlider()
+        setValue(for: redSlider, greenSlider, blueSlider)
         setValue(for: redLabel, greenLabel, blueLabel)
         setValue(for: redTextField, greenTextField, blueTextField)
         addDoneButtonTo(redTextField, greenTextField, blueTextField)
@@ -110,12 +110,17 @@ extension ColorViewController {
         }
     }
     
-    private func setValueForSlider() {
+    private func setValue(for sliders: UISlider...) {
         let ciColor = CIColor(color: currentColor)
         
-        redSlider.value = Float(ciColor.red)
-        greenSlider.value = Float(ciColor.green)
-        blueSlider.value = Float(ciColor.blue)
+        sliders.forEach { slider in
+            switch slider.tag {
+            case 0: redSlider.value = Float(ciColor.red)
+            case 1: greenSlider.value = Float(ciColor.green)
+            case 2: blueSlider.value = Float(ciColor.blue)
+            default: break
+            }
+        }
     }
     
     // Значения RGB
@@ -159,15 +164,9 @@ extension ColorViewController {
 // MARK: - UITextFieldDelegate
 extension ColorViewController: UITextFieldDelegate {
     
-    // Скрываем клавиатуру нажатием на "Done"
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-    }
-    
-    // Скрытие клавиатуры по тапу за пределами Text View
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        view.endEditing(true) // Скрывает клавиатуру, вызванную для любого объекта
+        view.endEditing(true)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
