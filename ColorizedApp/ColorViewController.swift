@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol ColorViewControllerDelegate {
-    func setColor(_ color: UIColor)
-}
-
 class ColorViewController: UIViewController {
 
     // MARK: - IB Outlets
@@ -31,7 +27,7 @@ class ColorViewController: UIViewController {
     
     // MARK: - Public Properties
     var delegate: ColorViewControllerDelegate!
-    var currentColor: UIColor!
+    var mainViewColor: UIColor!
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,12 +37,12 @@ class ColorViewController: UIViewController {
         redSlider.tintColor = .red
         greenSlider.tintColor = .green
         
-        colorView.backgroundColor = currentColor
+        colorView.backgroundColor = mainViewColor
         
-        setValue(for: redSlider, greenSlider, blueSlider)
+        setSliders()
         setValue(for: redLabel, greenLabel, blueLabel)
         setValue(for: redTextField, greenTextField, blueTextField)
-        addDoneButtonTo(redTextField, greenTextField, blueTextField)
+        addDoneButton(to: redTextField, greenTextField, blueTextField)
         
     }
     
@@ -55,14 +51,14 @@ class ColorViewController: UIViewController {
         
         switch sender.tag {
         case 0:
-            redLabel.text = string(from: sender)
-            redTextField.text = string(from: sender)
+            setValue(for: redLabel)
+            setValue(for: redTextField)
         case 1:
-            greenLabel.text = string(from: sender)
-            greenTextField.text = string(from: sender)
+            setValue(for: greenLabel)
+            setValue(for: greenTextField)
         case 2:
-            blueLabel.text = string(from: sender)
-            blueTextField.text = string(from: sender)
+            setValue(for: redLabel)
+            setValue(for: redTextField)
         default:
             break
         }
@@ -110,17 +106,12 @@ extension ColorViewController {
         }
     }
     
-    private func setValue(for sliders: UISlider...) {
-        let ciColor = CIColor(color: currentColor)
+    private func setSliders() {
+        let ciColor = CIColor(color: mainViewColor)
         
-        sliders.forEach { slider in
-            switch slider.tag {
-            case 0: redSlider.value = Float(ciColor.red)
-            case 1: greenSlider.value = Float(ciColor.green)
-            case 2: blueSlider.value = Float(ciColor.blue)
-            default: break
-            }
-        }
+        redSlider.value = Float(ciColor.red)
+        greenSlider.value = Float(ciColor.green)
+        blueSlider.value = Float(ciColor.blue)
     }
     
     // Значения RGB
@@ -128,21 +119,25 @@ extension ColorViewController {
         return String(format: "%.2f", slider.value)
     }
     
-    private func addDoneButtonTo(_ textFields: UITextField...) {
+    private func addDoneButton(to textFields: UITextField...) {
         
         textFields.forEach { textField in
             let keyboardToolbar = UIToolbar()
             textField.inputAccessoryView = keyboardToolbar
             keyboardToolbar.sizeToFit()
             
-            let doneButton = UIBarButtonItem(title:"Done",
-                                             style: .done,
-                                             target: self,
-                                             action: #selector(didTapDone))
+            let doneButton = UIBarButtonItem(
+                title:"Done",
+                style: .done,
+                target: self,
+                action: #selector(didTapDone)
+            )
             
-            let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                                                target: nil,
-                                                action: nil)
+            let flexBarButton = UIBarButtonItem(
+                barButtonSystemItem: .flexibleSpace,
+                target: nil,
+                action: nil
+            )
             
             keyboardToolbar.items = [flexBarButton, doneButton]
         }
@@ -188,8 +183,9 @@ extension ColorViewController: UITextFieldDelegate {
             }
             
             setColor()
-        } else {
-            showAlert(title: "Wrong format!", message: "Please enter correct value")
+            return
         }
+        
+        showAlert(title: "Wrong format!", message: "Please enter correct value")
     }
 }

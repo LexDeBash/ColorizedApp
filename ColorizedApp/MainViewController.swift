@@ -8,12 +8,16 @@
 
 import UIKit
 
+protocol ColorViewControllerDelegate {
+    func setColor(_ color: UIColor)
+}
+
 class MainViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let colorVC = segue.destination as! ColorViewController
         colorVC.delegate = self
-        colorVC.currentColor = view.backgroundColor
+        colorVC.mainViewColor = view.backgroundColor
     }
 }
 
