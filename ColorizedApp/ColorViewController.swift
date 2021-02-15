@@ -57,8 +57,8 @@ class ColorViewController: UIViewController {
             setValue(for: greenLabel)
             setValue(for: greenTextField)
         case 2:
-            setValue(for: redLabel)
-            setValue(for: redTextField)
+            setValue(for: blueLabel)
+            setValue(for: blueTextField)
         default:
             break
         }
@@ -116,7 +116,7 @@ extension ColorViewController {
     
     // Значения RGB
     private func string(from slider: UISlider) -> String {
-        return String(format: "%.2f", slider.value)
+        String(format: "%.2f", slider.value)
     }
     
     private func addDoneButton(to textFields: UITextField...) {
